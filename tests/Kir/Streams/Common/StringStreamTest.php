@@ -1,6 +1,9 @@
 <?php
 namespace Kir\Streams\Common;
 
+use Kir\Streams\Helper\ClosureStreamFactory;
+use Kir\Streams\VersatileStreamTest;
+
 class StringStreamTest extends VersatileStreamTest {
 	public function setUp() {
 		parent::setUp();
