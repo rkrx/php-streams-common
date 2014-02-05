@@ -1,6 +1,16 @@
 <?php
 namespace Kir\Streams\Common;
 
-class PhpStreamTest extends \PHPUnit_Framework_TestCase {
+use Kir\Streams\Helper\ClosureStreamFactory;
+use Kir\Streams\VersatileStreamTest;
+
+class PhpStreamTest extends VersatileStreamTest {
+	public function setUp() {
+		parent::setUp();
+		$this->setFactory(new ClosureStreamFactory(function () {
+			$stream = new PhpStream('php://memory', 'r+');
+			return $stream->open();
+		}));
+	}
 }
  

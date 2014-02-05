@@ -40,7 +40,7 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	}
 
 	/**
-	 * @throws \Kir\Streams\Common\Exceptions\IOException
+	 * @throws IOException
 	 * @return $this
 	 */
 	public function close() {
@@ -82,6 +82,7 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	 */
 	public function write($data) {
 		fwrite($this->res, $data);
+		$this->size = max(ftell($this->res), $this->size);
 		return $this;
 	}
 
@@ -97,19 +98,30 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 
 	/**
 	 * @param int $pos
-	 * @throws \Kir\Streams\Common\Exceptions\InvalidStreamOperationException
+	 * @throws InvalidStreamOperationException
 	 * @return $this
 	 */
 	public function setPosition($pos) {
 		if (!$this->isSeekable()) {
 			throw new InvalidStreamOperationException("Stream is not seekable");
 		}
-		$pos = min($pos, $this->size - 1);
+
+		$pos = min($pos, $this->getSize() - 1);
 		$pos = max($pos, 0);
+
 		fseek($this->res, $pos, SEEK_SET);
+
+		if(ftell($this->res) == $pos) {
+			return $this;
+		}
+
+		rewind($this->res);
+		fread($this->res, $pos);
+
 		if(ftell($this->res) != $pos) {
 			throw new InvalidStreamOperationException("Unable to set position");
 		}
+
 		return $this;
 	}
 
@@ -125,6 +137,7 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	 * @return int
 	 */
 	public function getSize() {
+		$this->updateSize();
 		return $this->size;
 	}
 
@@ -142,9 +155,6 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	 * @return bool
 	 */
 	protected function isSeekable() {
-		if($this->meta['stream_type'] == 'MEMORY') {
-			return false;
-		}
 		return !!$this->getMetaValue('seekable');
 	}
 
@@ -162,6 +172,12 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 			$this->size = ftell($this->res);
 			fseek($this->res, $pos, SEEK_SET);
 		}
+	}
+
+	/**
+	 */
+	private function updateSize() {
+		$this->size = max(ftell($this->res), $this->size);
 	}
 
 	/**

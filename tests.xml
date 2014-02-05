@@ -7,6 +7,8 @@
 	<testsuites>
 		<testsuite name="Streams">
 			<file>tests/Kir/Streams/Common/StringStreamTest.php</file>
+			<file>tests/Kir/Streams/Common/ResourceStreamTest.php</file>
+			<file>tests/Kir/Streams/Common/PhpStreamTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>

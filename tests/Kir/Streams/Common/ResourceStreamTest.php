@@ -1,7 +1,15 @@
 <?php
 namespace Kir\Streams\Common;
 
-class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
+use Kir\Streams\Helper\ClosureStreamFactory;
+use Kir\Streams\VersatileStreamTest;
 
+class ResourceStreamTest extends VersatileStreamTest {
+	public function setUp() {
+		parent::setUp();
+		$this->setFactory(new ClosureStreamFactory(function () {
+			return new ResourceStream(fopen('php://memory', 'r+'));
+		}));
+	}
 }
  
