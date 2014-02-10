@@ -36,7 +36,7 @@ class PhpStream extends ResourceStream implements ConnectableStream, Serializabl
 		$this->filename = $filename;
 		$this->accessMode = $accessMode;
 		if($openNow) {
-			$this->open();
+			$this->connect();
 		}
 	}
 

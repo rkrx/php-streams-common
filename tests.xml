@@ -6,9 +6,10 @@
 		 timeoutForSmallTests="5">
 	<testsuites>
 		<testsuite name="Streams">
-			<file>tests/Kir/Streams/Common/StringStreamTest.php</file>
 			<file>tests/Kir/Streams/Common/ResourceStreamTest.php</file>
 			<file>tests/Kir/Streams/Common/PhpStreamTest.php</file>
+			<file>tests/Kir/Streams/Common/MemoryStreamTest.php</file>
+			<file>tests/Kir/Streams/Common/StringStreamTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>
