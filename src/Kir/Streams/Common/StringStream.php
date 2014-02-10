@@ -1,9 +1,9 @@
 <?php
 namespace Kir\Streams\Common;
 
-use Kir\Streams\VersatileStream;
+use Kir\Streams\RandomAccessStream;
 
-class StringStream implements VersatileStream {
+class StringStream implements RandomAccessStream {
 	/**
 	 * @var string
 	 */
@@ -29,23 +29,9 @@ class StringStream implements VersatileStream {
 	}
 
 	/**
-	 * @return $this
-	 */
-	public function open() {
-		return $this;
-	}
-
-	/**
-	 * @return $this
-	 */
-	public function close() {
-		return $this;
-	}
-
-	/**
 	 * @return bool
 	 */
-	public function isEof() {
+	public function isAtEnd() {
 		return $this->pos >= $this->getSize();
 	}
 

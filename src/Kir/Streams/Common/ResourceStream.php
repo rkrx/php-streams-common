@@ -4,10 +4,11 @@ namespace Kir\Streams\Common;
 use Kir\Streams\Common\Exceptions\InvalidStreamOperationException;
 use Kir\Streams\ClosableStream;
 use Kir\Streams\Common\Exceptions\IOException;
+use Kir\Streams\DisconnectableStream;
 use Kir\Streams\RandomAccessStream;
 use Kir\Streams\TruncatableStream;
 
-class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableStream {
+class ResourceStream implements RandomAccessStream, TruncatableStream, DisconnectableStream {
 	/**
 	 * @var resource
 	 */
@@ -34,7 +35,7 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	 */
 	public function __destruct() {
 		try {
-			$this->close();
+			$this->disconnect();
 		} catch (\Exception $e) {
 		}
 	}
@@ -43,7 +44,7 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	 * @throws IOException
 	 * @return $this
 	 */
-	public function close() {
+	public function disconnect() {
 		try {
 			if($this->res === null) {
 				return;
@@ -60,7 +61,7 @@ class ResourceStream implements RandomAccessStream, TruncatableStream, ClosableS
 	/**
 	 * @return bool
 	 */
-	public function isEof() {
+	public function isAtEnd() {
 		return feof($this->res);
 	}
 

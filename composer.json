@@ -16,7 +16,7 @@
 	},
 	"autoload": {
 		"psr-0": {
-			"Kir\\Streams\\Common\\": ["src/", "tests/"]
+			"Kir\\Streams\\Common\\": "src/"
 		}
 	}
 }

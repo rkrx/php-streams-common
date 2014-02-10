@@ -2,10 +2,11 @@
 namespace Kir\Streams\Common;
 
 use Kir\Streams\Common\Exceptions\IOException;
+use Kir\Streams\ConnectableStream;
 use Kir\Streams\OpenableStream;
 use Kir\Streams\SerializableStream;
 
-class PhpStream extends ResourceStream implements OpenableStream, SerializableStream {
+class PhpStream extends ResourceStream implements ConnectableStream, SerializableStream {
 	/**
 	 * @var string
 	 */
@@ -43,7 +44,7 @@ class PhpStream extends ResourceStream implements OpenableStream, SerializableSt
 	 * @throws \Kir\Streams\Common\Exceptions\IOException
 	 * @return $this
 	 */
-	public function open() {
+	public function connect() {
 		try {
 			$res = fopen($this->filename, $this->accessMode);
 			$this->setResource($res);
@@ -51,7 +52,7 @@ class PhpStream extends ResourceStream implements OpenableStream, SerializableSt
 			$this->seekable = $this->isSeekable();
 		} catch (IOException $e) {
 			try {
-				$this->close();
+				$this->disconnect();
 			} catch(\Exception $e) {
 			}
 			throw $e;
@@ -63,9 +64,9 @@ class PhpStream extends ResourceStream implements OpenableStream, SerializableSt
 	 * @throws \Kir\Streams\Common\Exceptions\IOException
 	 * @return $this
 	 */
-	public function close() {
+	public function disconnect() {
 		$this->opened = false;
-		return parent::close();
+		return parent::disconnect();
 	}
 
 	/**
@@ -91,7 +92,7 @@ class PhpStream extends ResourceStream implements OpenableStream, SerializableSt
 		$this->accessMode = $data['mode'];
 
 		if($data['opened']) {
-			$this->open();
+			$this->connect();
 
 			if($this->isSeekable()) {
 				$this->setPosition($data['position']);

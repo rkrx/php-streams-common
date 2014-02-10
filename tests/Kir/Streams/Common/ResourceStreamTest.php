@@ -1,13 +1,12 @@
 <?php
 namespace Kir\Streams\Common;
 
-use Kir\Streams\Helper\ClosureStreamFactory;
-use Kir\Streams\VersatileStreamTest;
+use Kir\Streams\Tests\Helper\ClosureStreamFactory;
+use Kir\Streams\Tests\ResourceStreamTest AS StreamTest;
 
-class ResourceStreamTest extends VersatileStreamTest {
+class ResourceStreamTest extends StreamTest {
 	public function setUp() {
-		parent::setUp();
-		$this->setFactory(new ClosureStreamFactory(function () {
+		parent::setFactory(new ClosureStreamFactory(function () {
 			return new ResourceStream(fopen('php://memory', 'r+'));
 		}));
 	}
